@@ -10,10 +10,11 @@ type Props = {};
 const AuthCallbackPage = async (props: Props) => {
   const auth = await onAuthenticateUser();
 
-  console.log("🚀 ~ AuthCallbackPage ~ auth:", auth);
+  console.log("🚀 ~ AuthCallbackPage ~ auth:", auth.user);
 
   if (auth.status === 200 || auth.status === 201) {
-    return redirect(`/dashboard/${auth.user?.firstName}${auth.user?.lastName}`);
+    // return redirect(`/dashboard/${auth.user?.firstName}${auth.user?.lastName}`);
+    return redirect(`/dashboard/${auth.user?.workspaces[0].id}`);
   }
 
   return redirect("/auth/sign-in");
