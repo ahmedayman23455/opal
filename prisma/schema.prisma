@@ -11,4 +11,169 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+
+  // url = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  clerkId       String         @unique
+  email         String         @unique
+  firstName     String?
+  lastName      String?
+  studio        Media?
+  image         String?
+  trial         Boolean        @default(false)
+  firstView     Boolean        @default(false)
+  comments      Comment[]
+  workspaces    Workspace[]
+  videos        Video[]
+  subscription  Subscription?
+  members       Member[]
+  notifications Notification[]
+  sender        Invite[]       @relation("sender")
+  receiver      Invite[]       @relation("receiver")
+
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id      String    @id @default(uuid())
+  content String
+  reply   Comment[] @relation("reply")
+
+  createdAt DateTime @default(now())
+
+  commentId String?  @unique
+  comment   Comment? @relation("reply", fields: [commentId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  videoId String
+  video   Video  @relation(fields: [videoId], references: [id])
+}
+
+model Subscription {
+  id         String            @id @default(uuid())
+  customerId String?           @unique
+  plan       SUBSCRIPTION_PLAN @default(FREE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Media {
+  id     String  @id @default(uuid())
+  screen String?
+  mic    String?
+  camera String?
+  preset PRESET  @default(SD)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Workspace {
+  id      String   @id @default(uuid())
+  name    String
+  type    Type     @default(PERSONAL)
+  folders Folder[]
+  videos  Video[]
+  members Member[]
+  invite  Invite[]
+
+  createdAt DateTime @default(now())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Folder {
+  id     String  @id @default(uuid())
+  name   String  @default("Untitled folder")
+  videos Video[]
+
+  createdAt DateTime @default(now())
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+model Video {
+  id          String    @id @default(uuid())
+  title       String?   @default("Untitled video")
+  description String?   @default("No description")
+  source      String    @unique
+  views       Int       @default(0)
+  summary     String?
+  processing  Boolean   @default(true)
+  comments    Comment[]
+
+  createdAt DateTime @default(now())
+
+  folderId String
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model Member {
+  id     String  @id @default(uuid())
+  member Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+model Notification {
+  id      String @id @default(uuid())
+  content String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Invite {
+  id       String  @id @default(uuid())
+  content  String
+  accepted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  senderId String
+  sender   User   @relation("sender", fields: [senderId], references: [id])
+
+  receiverId String
+  receiver   User   @relation("receiver", fields: [receiverId], references: [id])
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+enum Type {
+  PERSONAL
+  PUBLIC
+}
+
+enum PRESET {
+  HD
+  SD
+}
+
+enum SUBSCRIPTION_PLAN {
+  FREE
+  PRO
 }

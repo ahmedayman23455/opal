@@ -1,0 +1,252 @@
+<svg width="1400" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define styles -->
+  <defs>
+    <style>
+      .table-box { fill: #ffffff; stroke: #2563eb; stroke-width: 2; rx: 8; }
+      .table-header { fill: #2563eb; }
+      .table-name { fill: #ffffff; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; }
+      .field-text { fill: #1f2937; font-family: Arial, sans-serif; font-size: 13px; }
+      .relation-line { stroke: #64748b; stroke-width: 2; fill: none; }
+      .one-to-one { stroke: #10b981; stroke-width: 2.5; }
+      .one-to-many { stroke: #f59e0b; stroke-width: 2.5; }
+      .many-to-many { stroke: #ef4444; stroke-width: 2.5; }
+      .label-text { fill: #64748b; font-family: Arial, sans-serif; font-size: 11px; font-style: italic; }
+      .enum-box { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2; rx: 6; }
+      .enum-header { fill: #f59e0b; }
+    </style>
+    <!-- Arrowheads -->
+    <marker id="arrow-one" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-many" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 M3,3 L9,3" stroke="#64748b" stroke-width="1.5" fill="none" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="30" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #1f2937;">Database Schema Relationships</text>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 50)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #1f2937;">Legend:</text>
+    <line x1="0" y1="15" x2="40" y2="15" class="one-to-one" />
+    <text x="45" y="20" class="label-text">One-to-One</text>
+    <line x1="0" y1="35" x2="40" y2="35" class="one-to-many" />
+    <text x="45" y="40" class="label-text">One-to-Many</text>
+  </g>
+
+  <!-- User (Center - Main Entity) -->
+  <g id="User" transform="translate(550, 200)">
+    <rect class="table-box" width="180" height="260" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">User</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">clerkId</text>
+    <text class="field-text" x="10" y="95">email</text>
+    <text class="field-text" x="10" y="115">firstName</text>
+    <text class="field-text" x="10" y="135">lastName</text>
+    <text class="field-text" x="10" y="155">image</text>
+    <text class="field-text" x="10" y="175">trial</text>
+    <text class="field-text" x="10" y="195">firstView</text>
+    <text class="field-text" x="10" y="215">createdAt</text>
+    <circle cx="90" cy="235" r="3" fill="#2563eb" />
+    <text class="label-text" x="90" y="255" text-anchor="middle">Central Entity</text>
+  </g>
+
+  <!-- Subscription (Top Left of User) -->
+  <g id="Subscription" transform="translate(50, 80)">
+    <rect class="table-box" width="180" height="140" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Subscription</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">customerId</text>
+    <text class="field-text" x="10" y="95">plan (enum)</text>
+    <text class="field-text" x="10" y="115">userId (FK)</text>
+  </g>
+  <!-- Subscription to User (One-to-One) -->
+  <path d="M 230 150 L 550 300" class="one-to-one" />
+  <text x="350" y="210" class="label-text">1:1</text>
+
+  <!-- Media (Top Right of User) -->
+  <g id="Media" transform="translate(900, 80)">
+    <rect class="table-box" width="180" height="140" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Media</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">screen</text>
+    <text class="field-text" x="10" y="95">mic</text>
+    <text class="field-text" x="10" y="115">camera</text>
+    <text class="field-text" x="10" y="135">preset (enum)</text>
+  </g>
+  <!-- Media to User (One-to-One) -->
+  <path d="M 900 150 L 730 300" class="one-to-one" />
+  <text x="820" y="210" class="label-text">1:1</text>
+
+  <!-- Workspace (Right of User) -->
+  <g id="Workspace" transform="translate(1050, 300)">
+    <rect class="table-box" width="180" height="160" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Workspace</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">name</text>
+    <text class="field-text" x="10" y="95">type (enum)</text>
+    <text class="field-text" x="10" y="115">userId (FK)</text>
+    <text class="field-text" x="10" y="135">createdAt</text>
+  </g>
+  <!-- User to Workspace (One-to-Many) -->
+  <path d="M 730 330 L 1050 380" class="one-to-many" />
+  <text x="870" y="345" class="label-text">1:N</text>
+
+  <!-- Folder (Below Workspace) -->
+  <g id="Folder" transform="translate(1050, 520)">
+    <rect class="table-box" width="180" height="120" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Folder</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">name</text>
+    <text class="field-text" x="10" y="95">workspaceId (FK)</text>
+  </g>
+  <!-- Workspace to Folder (One-to-Many) -->
+  <path d="M 1140 460 L 1140 520" class="one-to-many" />
+  <text x="1150" y="495" class="label-text">1:N</text>
+
+  <!-- Video (Center Bottom) -->
+  <g id="Video" transform="translate(550, 580)">
+    <rect class="table-box" width="180" height="200" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Video</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">title</text>
+    <text class="field-text" x="10" y="95">description</text>
+    <text class="field-text" x="10" y="115">source</text>
+    <text class="field-text" x="10" y="135">views</text>
+    <text class="field-text" x="10" y="155">processing</text>
+    <text class="field-text" x="10" y="175">userId (FK)</text>
+    <text class="field-text" x="10" y="195">folderId (FK)</text>
+    <text class="field-text" x="10" y="215">workspaceId (FK)</text>
+  </g>
+  <!-- User to Video (One-to-Many) -->
+  <path d="M 640 460 L 640 580" class="one-to-many" />
+  <text x="650" y="525" class="label-text">1:N</text>
+  <!-- Folder to Video (One-to-Many) -->
+  <path d="M 1050 590 L 730 650" class="one-to-many" />
+  <text x="870" y="610" class="label-text">1:N</text>
+  <!-- Workspace to Video (One-to-Many) -->
+  <path d="M 1050 420 L 730 650" class="one-to-many" stroke-dasharray="5,5" />
+  <text x="860" y="520" class="label-text">1:N</text>
+
+  <!-- Comment (Left Bottom) -->
+  <g id="Comment" transform="translate(250, 600)">
+    <rect class="table-box" width="180" height="160" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Comment</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">content</text>
+    <text class="field-text" x="10" y="95">userId (FK)</text>
+    <text class="field-text" x="10" y="115">videoId (FK)</text>
+    <text class="field-text" x="10" y="135">commentId (FK)</text>
+  </g>
+  <!-- User to Comment (One-to-Many) -->
+  <path d="M 550 380 L 340 600" class="one-to-many" />
+  <text x="430" y="470" class="label-text">1:N</text>
+  <!-- Video to Comment (One-to-Many) -->
+  <path d="M 550 680 L 430 680" class="one-to-many" />
+  <text x="470" y="670" class="label-text">1:N</text>
+  <!-- Comment Self-Reference (Replies) -->
+  <path d="M 250 680 Q 220 680 220 720 Q 220 760 250 760" class="one-to-many" stroke-dasharray="3,3" />
+  <text x="160" y="725" class="label-text">replies</text>
+
+  <!-- Member (Top Right Corner) -->
+  <g id="Member" transform="translate(900, 380)">
+    <rect class="table-box" width="180" height="120" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Member</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">userId (FK)</text>
+    <text class="field-text" x="10" y="95">workspaceId (FK)</text>
+  </g>
+  <!-- User to Member (One-to-Many) -->
+  <path d="M 730 340 L 900 430" class="one-to-many" />
+  <text x="805" y="375" class="label-text">1:N</text>
+  <!-- Workspace to Member (One-to-Many) -->
+  <path d="M 1050 400 L 1080 440" class="one-to-many" />
+  <text x="1020" y="425" class="label-text">1:N</text>
+
+  <!-- Notification (Left of User) -->
+  <g id="Notification" transform="translate(250, 300)">
+    <rect class="table-box" width="180" height="100" />
+    <rect class="table-header" width="180" height="35" rx="8" />
+    <text class="table-name" x="90" y="23" text-anchor="middle">Notification</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">content</text>
+    <text class="field-text" x="10" y="95">userId (FK)</text>
+  </g>
+  <!-- User to Notification (One-to-Many) -->
+  <path d="M 550 330 L 430 350" class="one-to-many" />
+  <text x="470" y="330" class="label-text">1:N</text>
+
+  <!-- Invite (Bottom Right) -->
+  <g id="Invite" transform="translate(850, 880)">
+    <rect class="table-box" width="200" height="160" />
+    <rect class="table-header" width="200" height="35" rx="8" />
+    <text class="table-name" x="100" y="23" text-anchor="middle">Invite</text>
+    <text class="field-text" x="10" y="55">id (PK)</text>
+    <text class="field-text" x="10" y="75">content</text>
+    <text class="field-text" x="10" y="95">accepted</text>
+    <text class="field-text" x="10" y="115">senderId (FK)</text>
+    <text class="field-text" x="10" y="135">receiverId (FK)</text>
+    <text class="field-text" x="10" y="155">workspaceId (FK)</text>
+  </g>
+  <!-- User to Invite Sender (One-to-Many) -->
+  <path d="M 640 460 Q 750 650 900 880" class="one-to-many" stroke-dasharray="5,5" />
+  <text x="740" y="650" class="label-text">sender 1:N</text>
+  <!-- User to Invite Receiver (One-to-Many) -->
+  <path d="M 680 460 Q 780 670 950 880" class="one-to-many" stroke-dasharray="3,3" />
+  <text x="800" y="680" class="label-text">receiver 1:N</text>
+  <!-- Workspace to Invite (One-to-Many) -->
+  <path d="M 1140 460 L 1000 880" class="one-to-many" />
+  <text x="1080" y="660" class="label-text">1:N</text>
+
+  <!-- Enums Section -->
+  <g transform="translate(50, 900)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1f2937;">Enums:</text>
+    
+    <!-- Type Enum -->
+    <g transform="translate(0, 20)">
+      <rect class="enum-box" width="150" height="85" />
+      <rect class="enum-header" width="150" height="30" rx="6" />
+      <text class="table-name" x="75" y="20" text-anchor="middle">Type</text>
+      <text class="field-text" x="10" y="50">PERSONAL</text>
+      <text class="field-text" x="10" y="70">PUBLIC</text>
+    </g>
+    
+    <!-- PRESET Enum -->
+    <g transform="translate(170, 20)">
+      <rect class="enum-box" width="150" height="85" />
+      <rect class="enum-header" width="150" height="30" rx="6" />
+      <text class="table-name" x="75" y="20" text-anchor="middle">PRESET</text>
+      <text class="field-text" x="10" y="50">HD</text>
+      <text class="field-text" x="10" y="70">SD</text>
+    </g>
+    
+    <!-- SUBSCRIPTION_PLAN Enum -->
+    <g transform="translate(340, 20)">
+      <rect class="enum-box" width="180" height="85" />
+      <rect class="enum-header" width="180" height="30" rx="6" />
+      <text class="table-name" x="90" y="20" text-anchor="middle">SUBSCRIPTION_PLAN</text>
+      <text class="field-text" x="10" y="50">FREE</text>
+      <text class="field-text" x="10" y="70">PRO</text>
+    </g>
+  </g>
+
+  <!-- Notes Box -->
+  <g transform="translate(50, 1050)">
+    <rect width="500" height="120" fill="#f0f9ff" stroke="#3b82f6" stroke-width="1" rx="6" />
+    <text x="10" y="25" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #1e40af;">Key Relationships:</text>
+    <text x="10" y="45" style="font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937;">• User is the central entity with 1:1 relationships to Subscription & Media</text>
+    <text x="10" y="65" style="font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937;">• User has 1:N relationships with Workspace, Video, Comment, & Notification</text>
+    <text x="10" y="85" style="font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937;">• Workspace contains Folders and Videos in a hierarchical structure</text>
+    <text x="10" y="105" style="font-family: Arial, sans-serif; font-size: 12px; fill: #1f2937;">• Member links Users to Workspaces (many-to-many through join table)</text>
+  </g>
+</svg>
+
