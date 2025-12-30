@@ -7,7 +7,7 @@ export const onAuthenticateUser = async () => {
     const user = await currentUser();
 
     if (!user) {
-      return { stauts: 403 };
+      return { status: 401 }; // 401 unauthorized
     }
 
     const userExist = await client.user.findUnique({
