@@ -2,6 +2,8 @@
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const onAuthenticateUser = async () => {
   try {
     const user = await currentUser();
@@ -65,6 +67,40 @@ export const onAuthenticateUser = async () => {
       return { status: 201, user: newUser };
     }
     return { status: 400 };
+  } catch (error) {
+    return { status: 500 };
+  }
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const getNotifications = async () => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      return { status: 403 };
+    }
+
+    const notifications = await client.user.findMany({
+      where: {
+        clerkId: user.id,
+      },
+      select: {
+        notifications: true,
+        _count: {
+          select: {
+            notifications: true,
+          },
+        },
+      },
+    });
+
+    if (notifications && notifications.length > 0) {
+      return { status: 200, data: { notifications: notifications } };
+    }
+
+    return { status: 200, data: { notifications: null } };
   } catch (error) {
     return { status: 500 };
   }

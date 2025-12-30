@@ -1,8 +1,17 @@
-import { onAuthenticateUser } from "@/actions/user";
-import { getWorkspaceFolders, verifyAccessToWorkspace } from "@/actions/workspace";
+import { getNotifications, onAuthenticateUser } from "@/actions/user";
+import {
+  getAllUserVideos,
+  getWorkspaceFolders,
+  getWorkspaces,
+  verifyAccessToWorkspace,
+} from "@/actions/workspace";
 import { redirect } from "next/navigation";
 import React from "react";
-import { dehydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 type Props = {
   children: React.ReactNode;
@@ -23,35 +32,34 @@ const Layout = async ({ children, params: { workspaceId } }: Props) => {
   const hasAccess = await verifyAccessToWorkspace(workspaceId);
 
   if (hasAccess.status !== 200) {
-    redirect(`/dashboard/${auth.user?.workspaces[0].id}`)
+    redirect(`/dashboard/${auth.user?.workspaces[0].id}`);
   }
 
   if (!hasAccess.data?.workspace) {
-    return null
+    return null;
   }
 
   const query = new QueryClient();
 
   await query.prefetchQuery({
-    queryKey: ["workspace-folders"] ,
-    queryFn: () => getWorkspaceFolders(workspaceId)
+    queryKey: ["workspace-folders"],
+    queryFn: () => getWorkspaceFolders(workspaceId),
   });
 
   await query.prefetchQuery({
-    queryKey: ["user-videos"] ,
-    queryFn: () => getAllUserVideos(workspaceId)
+    queryKey: ["user-videos"],
+    queryFn: () => getAllUserVideos(workspaceId),
   });
 
   await query.prefetchQuery({
-    queryKey: ["user-workspaces"] ,
-    queryFn: () => getWorkspaces()
+    queryKey: ["user-workspaces"],
+    queryFn: () => getWorkspaces(),
   });
 
   await query.prefetchQuery({
-    queryKey: ["user-notifications"] ,
-    queryFn: () => getNotifications()
+    queryKey: ["user-notifications"],
+    queryFn: () => getNotifications(),
   });
-
 
   /* 
     NOTE :
@@ -63,7 +71,6 @@ const Layout = async ({ children, params: { workspaceId } }: Props) => {
 };
 
 export default Layout;
-
 
 /* 
   NOTE : 
