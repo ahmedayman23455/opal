@@ -37,7 +37,7 @@ export const verifyAccessToWorkspace = async (workspaceId: string) => {
 
     return { status: 200, data: { workspace: isUserInWorkspace } };
   } catch (error) {
-    return { status: 500 };
+    return { status: 500, data: null };
   }
 };
 
@@ -63,7 +63,7 @@ export const getWorkspaceFolders = async (workspaceId: string) => {
     }
     return { status: 200, data: { folders: null } };
   } catch (error) {
-    return { status: 500 };
+    return { status: 500, data: null };
   }
 };
 
@@ -110,7 +110,7 @@ export const getAllUserVideos = async (workspaceId: string) => {
     }
     return { status: 200, data: { videos: null } };
   } catch (error) {
-    return { status: 500 };
+    return { status: 500, data: null };
   }
 };
 
@@ -160,6 +160,6 @@ export const getWorkspaces = async () => {
     }
     return { status: 200, data: { workspaces: null } };
   } catch (error) {
-    return { status: 500 };
+    return { status: 500, data: null };
   }
 };

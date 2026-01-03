@@ -79,7 +79,7 @@ export const getNotifications = async () => {
     const user = await currentUser();
 
     if (!user) {
-      return { status: 403 };
+      return { status: 401 };
     }
 
     const notifications = await client.user.findMany({
@@ -103,5 +103,57 @@ export const getNotifications = async () => {
     return { status: 200, data: { notifications: null } };
   } catch (error) {
     return { status: 500 };
+  }
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const searchUsers = async (query: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      return { status: 401 };
+    }
+
+    const users = await client.user.findMany({
+      where: {
+        OR: [
+          {
+            firstName: { contains: query },
+          },
+          {
+            lastName: { contains: query },
+          },
+          {
+            email: { contains: query },
+          },
+        ],
+        NOT: [
+          {
+            clerkId: user.id,
+          },
+        ],
+      },
+      select: {
+        id: true,
+        subscription: {
+          select: {
+            plan: true,
+          },
+        },
+        firstName: true,
+        lastName: true,
+        image: true,
+        email: true,
+      },
+    });
+
+    if (users && users.length > 0) {
+      return { status: 200, data: { users: users } };
+    }
+    return { status: 200, data: { users: null } };
+  } catch (error) {
+    return { status: 500, data: { users: null } };
   }
 };
